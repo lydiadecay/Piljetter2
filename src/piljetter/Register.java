@@ -34,6 +34,9 @@ public class Register {
         //lägg till panelerna i framen
         frame.add(register);
         frame.add(loggedIn.mainMenuPanel);
+        frame.add(loggedIn.searchPanel);
+        frame.add(loggedIn.pesetasPanel);
+        frame.add(loggedIn.concertsPanel);
 
         frame.setVisible(true);
         register.setVisible(true);
@@ -76,6 +79,25 @@ public class Register {
             loggedIn.concertsPanel.setVisible(true);
             loggedIn.mainMenuPanel.setVisible(false);
         });
+
+        //loggedIn.searchBandButton.addActionListener(e ->);
+
+        //loggedIn.searchCountryButton.addActionListener(e ->);
+
+        // loggedIn.searchCityButton.addActionListener(e ->);
+
+        loggedIn.backButton1.addActionListener(e ->{
+            loggedIn.mainMenuPanel.setVisible(true);
+            loggedIn.searchPanel.setVisible(false);
+        });
+
+        loggedIn.backButton2.addActionListener(e ->{
+            loggedIn.mainMenuPanel.setVisible(true);
+            loggedIn.pesetasPanel.setVisible(false);
+        });
+
+
+        // loggedIn.confirmButton.addActionListener(e ->);
 
     }
 
