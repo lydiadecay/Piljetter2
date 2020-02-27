@@ -19,6 +19,8 @@ public class Register {
 
     LoggedIn loggedIn = new LoggedIn();
 
+
+
     void start() {
         frame.setBounds(370,120,600, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -31,12 +33,14 @@ public class Register {
         loggedIn.buyPesetas();
         loggedIn.seeConcerts();
 
+
         //lägg till panelerna i framen
         frame.add(register);
         frame.add(loggedIn.mainMenuPanel);
         frame.add(loggedIn.searchPanel);
         frame.add(loggedIn.pesetasPanel);
         frame.add(loggedIn.concertsPanel);
+
 
         frame.setVisible(true);
         register.setVisible(true);
