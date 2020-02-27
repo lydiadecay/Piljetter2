@@ -1,4 +1,4 @@
-package com.company;
+package piljetter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class buyTickets {
+public class BuyTickets {
 
         static JPanel buyTicketsPanel = new JPanel();
 
@@ -68,11 +68,10 @@ public class buyTickets {
                 });
 
 
-                Login.adminFrame.add(buyTicketsPanel);
         }
                 private void printbuttons(){
                 try {
-                        Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "oddschool0");
+                        Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "MagicalDay9296");
                         Statement statement = connection.createStatement();
                         ResultSet resultset = statement.executeQuery(
                                 "select * from piljetter.bands b, piljetter.concerts c, piljetter.venues v " +

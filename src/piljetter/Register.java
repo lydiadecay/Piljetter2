@@ -18,8 +18,10 @@ public class Register {
     String usernameInput, pasInput;
 
     LoggedIn loggedIn = new LoggedIn();
+    BuyTickets buyTickets = new BuyTickets();
 
     void start() {
+
         frame.setBounds(370,120,600, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setUndecorated(true);
@@ -37,11 +39,13 @@ public class Register {
         frame.add(loggedIn.searchPanel);
         frame.add(loggedIn.pesetasPanel);
         frame.add(loggedIn.concertsPanel);
+        frame.add(BuyTickets.buyTicketsPanel);
 
         frame.setVisible(true);
         register.setVisible(true);
 
         exitLoginButton.addActionListener(e->System.exit(0));
+
         registerButton.addActionListener(e->{
             usernameInput = username.getText();
             pasInput = password.getText();
@@ -54,6 +58,9 @@ public class Register {
             }
         });
         loginButton.addActionListener(e->{
+            usernameInput = username.getText();
+
+            getUser();
             register.setVisible(false);
             loggedIn.mainMenuPanel.setVisible(true);
         });
@@ -99,6 +106,26 @@ public class Register {
 
         // loggedIn.confirmButton.addActionListener(e ->);
 
+    }
+
+    void getUser(){
+
+        try{
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "MagicalDay9296");
+
+            Statement statement = connection.createStatement();
+
+            ResultSet resultSet = statement.executeQuery("SELECT customer_id FROM piljetter.user_account WHERE email = '"+usernameInput+"'");
+
+            while(resultSet.next()){
+                loggedIn.currentUser = resultSet.getString("customer_id");
+            }
+
+        }
+        catch (Exception e){
+            System.out.println(e.toString());
+            System.out.println("ojoj");
+        }
     }
 
     private void loginPanel(){
@@ -185,7 +212,7 @@ public class Register {
 
             Statement statement = connection.createStatement();
 
-            statement.executeQuery("insert into piljetter.user_account(email,password,pesetas_balance,coupons) values ('"+usernameInput+"','"+pasInput+"',150,0)");
+            statement.executeQuery("insert into piljetter.user_account(email,password,pesetas_balance) values ('"+usernameInput+"','"+pasInput+"',150,0)");
 
         }
         catch (Exception e){
@@ -193,3 +220,11 @@ public class Register {
         }
     }
 }
+
+
+   /* ResultSet resultset = statement.executeQuery("select * from user_accounts");
+                System.out.println("got spagett");
+                while(resultset.next()){
+                if(resultset.getString(2).equals(usernameInput)) {
+                }
+                }*/

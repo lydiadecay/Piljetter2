@@ -25,6 +25,7 @@ public class LoggedIn {
     TextField countryField;
     TextField cityField;
     TextField buyPesetasField;
+    String currentUser;
 
 
     void menu(){
@@ -180,21 +181,24 @@ public class LoggedIn {
         concertsPanel.setVisible(false);
     }
 
-  /* private void pesetasAmount() {
+   private void pesetasAmount() {
+
         try{
 
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "MagicalDay9296");
 
             Statement statement = connection.createStatement();
 
-            statement.executeQuery("insert into piljetter.user_account(email,password,pesetas_balance,coupons) values ('"+usernameInput+"','"+pasInput+"',150,0)");
+            String pesetas = buyPesetasField.getText();
+
+            //statement.executeQuery("update piljetter.user_account set pesetas_balance = pesetas_balance + "+pesetas+" where customer_id = ;
 
         }
         catch (Exception e){
             System.out.println(e.toString());
         }
     }
-    */
+
 }
 
 

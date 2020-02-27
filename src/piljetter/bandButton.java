@@ -1,4 +1,4 @@
-package com.company;
+package piljetter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +20,7 @@ public class bandButton {
                     bandButton.setBounds(buttonPositionX, buttonPositionY, 200, 25);
                     bandButton.setFocusPainted(false);
                     bandButton.setFont(new Font("serif", 0, 20));
-                    buyTickets.buyTicketsPanel.add(bandButton);
+                    BuyTickets.buyTicketsPanel.add(bandButton);
 
                     //System.out.println(buttonPositionY);
                     if (buttonPositionX < 650 )buttonPositionX += 200;
