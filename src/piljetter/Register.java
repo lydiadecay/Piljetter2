@@ -61,12 +61,18 @@ public class Register {
                 registerNewUser();
             }
         });
-        loginButton.addActionListener(e->{
+        loginButton.addActionListener(e-> {
             usernameInput = username.getText();
+            pasInput = password.getText();
 
             getUser();
-            register.setVisible(false);
+            if (!loggedIn.currentUser.equals("")){
+                register.setVisible(false);
             loggedIn.mainMenuPanel.setVisible(true);
+        }
+        else{
+                System.out.println("incorrect username/password combination");
+            }
         });
 
         loggedIn.logOutButton.addActionListener(e ->{
@@ -74,6 +80,8 @@ public class Register {
             loggedIn.mainMenuPanel.setVisible(false);
             username.setText("");
             password.setText("");
+            loggedIn.currentUser = "";
+
         });
 
         loggedIn.searchButton.addActionListener(e -> {
@@ -115,11 +123,11 @@ public class Register {
     void getUser(){
 
         try{
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "MagicalDay9296");
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "oddschool0");
 
             Statement statement = connection.createStatement();
 
-            ResultSet resultSet = statement.executeQuery("SELECT customer_id FROM piljetter.user_account WHERE email = '"+usernameInput+"'");
+            ResultSet resultSet = statement.executeQuery("SELECT customer_id FROM piljetter.user_accounts WHERE (email = '"+usernameInput+"') and (password = '"+pasInput+"') ");
 
             while(resultSet.next()){
                 loggedIn.currentUser = resultSet.getString("customer_id");
@@ -212,11 +220,11 @@ public class Register {
     private void registerNewUser() {
         try{
 
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "MagicalDay9296");
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "oddschool0");
 
             Statement statement = connection.createStatement();
 
-            statement.executeQuery("insert into piljetter.user_account(email,password,pesetas_balance) values ('"+usernameInput+"','"+pasInput+"',150,0)");
+            statement.execute("insert into piljetter.user_accounts(email,password,pesetas_balance) values ('"+usernameInput+"','"+pasInput+"',150)");
 
         }
         catch (Exception e){

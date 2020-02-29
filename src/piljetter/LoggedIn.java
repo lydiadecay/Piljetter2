@@ -25,7 +25,7 @@ public class LoggedIn {
     TextField countryField;
     TextField cityField;
     TextField buyPesetasField;
-    String currentUser;
+    String currentUser = "";
 
 
     void menu(){
