@@ -25,8 +25,10 @@ public class buyTickets {
         static public JTextField ticketToBuy = new JTextField("Ticket to buy");
         JButton searchbutton = new JButton("search");
         JButton couponButton = new JButton("use coupon");
+        JButton backToMenu = new JButton("Back");;
 
         static boolean coupon = false;
+
 
 
         public void allConcerts() {
@@ -45,7 +47,7 @@ public class buyTickets {
                 ticketToBuy.setVisible(true);
                 buyTicketsPanel.add(ticketToBuy);
 
-                //coonfirm search button
+                //confirm search button
                 searchbutton.setForeground(Color.black);
                 searchbutton.setBackground(Color.green);
                 searchbutton.setBounds(400, 0, 200, 25);
@@ -93,6 +95,16 @@ public class buyTickets {
 
 
                 Login.adminFrame.add(buyTicketsPanel);
+                
+                backToMenu.setForeground(Color.black);
+                backToMenu.setBackground(Color.white);
+                backToMenu.setBounds(400,200,100,50);
+                backToMenu.setFocusPainted(false);
+                backToMenu.setFont(new Font("serif", Font.PLAIN,15));
+
+                buyTicketsPanel.add(backToMenu);
+
+
         }
                 private void printbuttons(){
                 try {
@@ -104,19 +116,17 @@ public class buyTickets {
                                         "or (UPPER (v.venue_name) like UPPER ('%"+searchword+"%')) " +
                                         "or (UPPER (v.country) like UPPER ('%"+searchword+"%')) " +
                                         "or (UPPER (v.city) like UPPER ('%"+searchword+"%')) " +
-                                        "or ((c.date <= '"+searchword+"') and (c.date >= current_date)) " +
+                                        "or ((c.date <= '"+searchword+"') and (c.date >= current_date)) " + //finds concerts between now and the searchdate
 
 
-                                        "and (c.date) > current_date"); //filterar ut de konserter som redan varit
-
+                                        "and (c.date) > current_date"); //filters out past concerts
 
                         while(resultset.next()){
-                                //System.out.println(resultset.getString("band_name")); //s = kolumnen
-                                                buttonTextBand = resultset.getString("band_name"); //band
-                                                buttonTextVenue = resultset.getString("venue_name"); //arena / venue
-                                                buttonTextDate = resultset.getString("date"); //date & time
-                                                buttonTextCountry = resultset.getString("country"); //country
-                                                buttonConcertId = resultset.getString("concert_id"); //c id
+                                                buttonTextBand = resultset.getString("band_name");
+                                                buttonTextVenue = resultset.getString("venue_name");
+                                                buttonTextDate = resultset.getString("date");
+                                                buttonTextCountry = resultset.getString("country");
+                                                buttonConcertId = resultset.getString("concert_id");
 
 
 
@@ -129,5 +139,7 @@ public class buyTickets {
                         System.out.println(var3.toString());
                 }
         }
+
+
 }
 
