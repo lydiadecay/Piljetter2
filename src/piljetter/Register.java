@@ -10,8 +10,8 @@ import java.sql.Statement;
 public class Register {
     JFrame frame = new JFrame();
     JPanel register = new JPanel();
-    TextField username;
-    TextField password;
+    TextField usernameField;
+    TextField passwordField;
     JButton loginButton,exitLoginButton,registerButton;
     JLabel error, error2;
 
@@ -19,6 +19,8 @@ public class Register {
 
     LoggedIn loggedIn = new LoggedIn();
     BuyTickets buyTickets = new BuyTickets();
+
+
 
     void start() {
 
@@ -29,9 +31,11 @@ public class Register {
         //hämtar data om panelerna
         loginPanel();
         loggedIn.menu();
-        loggedIn.search();
         loggedIn.buyPesetas();
-        loggedIn.seeConcerts();
+        loggedIn.ticketsList();
+        loggedIn.couponsList();
+        //loggedIn.seeConcerts();
+
 
         //lägg till panelerna i framen
         frame.add(register);
@@ -39,7 +43,9 @@ public class Register {
         frame.add(loggedIn.searchPanel);
         frame.add(loggedIn.pesetasPanel);
         frame.add(loggedIn.concertsPanel);
-        frame.add(BuyTickets.buyTicketsPanel);
+        frame.add(buyTickets.buyTicketsPanel);
+        frame.add(loggedIn.ticketsListPanel);
+        frame.add(loggedIn.couponsListPanel);
 
         frame.setVisible(true);
         register.setVisible(true);
@@ -47,8 +53,8 @@ public class Register {
         exitLoginButton.addActionListener(e->System.exit(0));
 
         registerButton.addActionListener(e->{
-            usernameInput = username.getText();
-            pasInput = password.getText();
+            usernameInput = usernameField.getText();
+            pasInput = passwordField.getText();
 
             if (usernameInput.equals("")||pasInput.equals("")) {
                 error2.setVisible(true);
@@ -58,24 +64,23 @@ public class Register {
             }
         });
         loginButton.addActionListener(e->{
-            usernameInput = username.getText();
+            usernameInput = usernameField.getText();
 
             getUser();
             register.setVisible(false);
             loggedIn.mainMenuPanel.setVisible(true);
+            updateMenu();
+
+            loggedIn.getCoupons();
         });
 
         loggedIn.logOutButton.addActionListener(e ->{
             register.setVisible(true);
             loggedIn.mainMenuPanel.setVisible(false);
-            username.setText("");
-            password.setText("");
+            usernameField.setText("");
+            passwordField.setText("");
         });
 
-        loggedIn.searchButton.addActionListener(e -> {
-            loggedIn.searchPanel.setVisible(true);
-            loggedIn.mainMenuPanel.setVisible(false);
-        });
 
         loggedIn.buyPesetasButton.addActionListener(e -> {
             loggedIn.pesetasPanel.setVisible(true);
@@ -83,28 +88,75 @@ public class Register {
         });
 
         loggedIn.allConcertsButton.addActionListener(e -> {
-            loggedIn.concertsPanel.setVisible(true);
+            buyTickets.allConcerts();
+            buyTickets.buyTicketsPanel.setVisible(true);
             loggedIn.mainMenuPanel.setVisible(false);
         });
 
-        //loggedIn.searchBandButton.addActionListener(e ->);
 
-        //loggedIn.searchCountryButton.addActionListener(e ->);
-
-        // loggedIn.searchCityButton.addActionListener(e ->);
-
-        loggedIn.backButton1.addActionListener(e ->{
-            loggedIn.mainMenuPanel.setVisible(true);
-            loggedIn.searchPanel.setVisible(false);
-        });
-
-        loggedIn.backButton2.addActionListener(e ->{
+        loggedIn.backButton.addActionListener(e ->{
             loggedIn.mainMenuPanel.setVisible(true);
             loggedIn.pesetasPanel.setVisible(false);
         });
 
 
-        // loggedIn.confirmButton.addActionListener(e ->);
+        loggedIn.confirmButton.addActionListener(e -> {
+            loggedIn.pesetasAmount();
+            loggedIn.pesetasPanel.setVisible(false);
+            loggedIn.mainMenuPanel.setVisible(true);
+        });
+
+       /* loggedIn.allTicketsButton.addActionListener(e -> {
+
+        });*/
+
+       loggedIn.allTicketsButton.addActionListener(e ->{
+           loggedIn.getTicketsList();
+       });
+
+       loggedIn.allCouponsButton.addActionListener(e ->{
+           loggedIn.mainMenuPanel.setVisible(false);
+           loggedIn.couponsListPanel.setVisible(true);
+       });
+
+       loggedIn.backButton2.addActionListener(e ->{
+           loggedIn.ticketsListPanel.setVisible(false);
+           loggedIn.mainMenuPanel.setVisible(true);
+       });
+
+        loggedIn.backButton3.addActionListener(e ->{
+            loggedIn.couponsListPanel.setVisible(false);
+            loggedIn.mainMenuPanel.setVisible(true);
+        });
+
+        buyTickets.backToMenu.addActionListener(e ->{
+            buyTickets.allConcerts();
+            buyTickets.buyTicketsPanel.setVisible(false);
+            loggedIn.mainMenuPanel.setVisible(true);
+        });
+
+    }
+
+    void updateMenu(){
+
+        try{
+
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "MagicalDay9296");
+
+            Statement statement = connection.createStatement();
+
+            ResultSet testResult = statement.executeQuery("select pesetas_balance from piljetter.user_account where customer_id = "+loggedIn.currentUser+"");
+
+            while(testResult.next()){
+                 String x =  testResult.getString("pesetas_balance");
+                 loggedIn.pesetas.setText("Pesetas: "+ x);
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.toString());
+        }
+
+
 
     }
 
@@ -118,7 +170,7 @@ public class Register {
             ResultSet resultSet = statement.executeQuery("SELECT customer_id FROM piljetter.user_account WHERE email = '"+usernameInput+"'");
 
             while(resultSet.next()){
-                loggedIn.currentUser = resultSet.getString("customer_id");
+                loggedIn.currentUser = resultSet.getInt("customer_id");
             }
 
         }
@@ -136,12 +188,12 @@ public class Register {
         adminLogin.setFont(new Font("serif", Font.PLAIN,40));
         adminLogin.setBounds(190,30,1000,50);
 
-        username = new TextField("");
-        username.setBounds(155,150,300,30);
-        username.setFont(new Font("serif", Font.PLAIN,20));
+        usernameField = new TextField("");
+        usernameField.setBounds(155,150,300,30);
+        usernameField.setFont(new Font("serif", Font.PLAIN,20));
 
-        password = new TextField("");
-        password.setBounds(155,230,300,30);
+        passwordField = new TextField("");
+        passwordField.setBounds(155,230,300,30);
 
         loginButton = new JButton("Log in");
         loginButton.setForeground(Color.black);
@@ -194,8 +246,8 @@ public class Register {
         register.setVisible(false);
 
         register.add(adminLogin);
-        register.add(username);
-        register.add(password);
+        register.add(usernameField);
+        register.add(passwordField);
         register.add(loginButton);
         register.add(exitLoginButton);
         register.add(registerButton);
@@ -212,7 +264,7 @@ public class Register {
 
             Statement statement = connection.createStatement();
 
-            statement.executeQuery("insert into piljetter.user_account(email,password,pesetas_balance) values ('"+usernameInput+"','"+pasInput+"',150,0)");
+            statement.executeQuery("insert into piljetter.user_account(email,password,pesetas_balance) values ('"+usernameInput+"','"+pasInput+"',150)");
 
         }
         catch (Exception e){

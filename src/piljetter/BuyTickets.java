@@ -22,8 +22,10 @@ public class BuyTickets {
         String searchword;
         JTextField search = new JTextField("search here");
         JButton searchbutton = new JButton("search");
+        JButton backToMenu = new JButton("Back");;
 
         int i = 1;
+
 
 
         public void allConcerts() {
@@ -38,7 +40,7 @@ public class BuyTickets {
                 search.setVisible(true);
                 buyTicketsPanel.add(search);
 
-                //coonfirm search button
+                //confirm search button
                 searchbutton.setForeground(Color.black);
                 searchbutton.setBackground(Color.green);
                 searchbutton.setBounds(400, 0, 200, 25);
@@ -68,16 +70,22 @@ public class BuyTickets {
                 });
 
 
+                backToMenu.setForeground(Color.black);
+                backToMenu.setBackground(Color.white);
+                backToMenu.setBounds(400,200,100,50);
+                backToMenu.setFocusPainted(false);
+                backToMenu.setFont(new Font("serif", Font.PLAIN,15));
+
+                buyTicketsPanel.add(backToMenu);
+
+
         }
                 private void printbuttons(){
                 try {
                         Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "MagicalDay9296");
                         Statement statement = connection.createStatement();
                         ResultSet resultset = statement.executeQuery(
-                                "select * from piljetter.bands b, piljetter.concerts c, piljetter.venues v " +
-                                        "WHERE b.band_id = c.band_id and v.venue_id = c.venue_id and " +
-                                        "(UPPER (b.band_name) like UPPER ('%"+searchword+"%')) and " + //searchword case insensetive
-                                        "(c.start_date) > current_timestamp"); //filterar ut de konserter som redan varit
+                                "select * from piljetter.bands b, piljetter.concerts c, piljetter.venues v WHERE b.band_id = c.band_id and v.venue_id = c.venue_id and (UPPER (b.band_name) like UPPER ('%"+searchword+"%')) and (c.date) > current_timestamp"); //filterar ut de konserter som redan varit
 
 
                         while(resultset.next()){
@@ -98,5 +106,7 @@ public class BuyTickets {
                         System.out.println(var3.toString());
                 }
         }
+
+
 }
 

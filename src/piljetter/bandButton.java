@@ -7,7 +7,8 @@ public class bandButton {
 
     public static int buttonPositionX = 50;
     public static int buttonPositionY = 50;
-    static JButton bandButton;
+    JButton bandButton;
+
 
     bandButton(String buttonTextBand){
         button(buttonTextBand);
