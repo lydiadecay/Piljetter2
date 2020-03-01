@@ -37,6 +37,7 @@ public class Register {
         //loggedIn.seeConcerts();
 
 
+
         //lägg till panelerna i framen
         frame.add(register);
         frame.add(loggedIn.mainMenuPanel);
@@ -46,6 +47,7 @@ public class Register {
         frame.add(buyTickets.buyTicketsPanel);
         frame.add(loggedIn.ticketsListPanel);
         frame.add(loggedIn.couponsListPanel);
+
 
         frame.setVisible(true);
         register.setVisible(true);
@@ -65,13 +67,21 @@ public class Register {
         });
         loginButton.addActionListener(e->{
             usernameInput = usernameField.getText();
+        loginButton.addActionListener(e-> {
+            usernameInput = username.getText();
+            pasInput = password.getText();
 
             getUser();
-            register.setVisible(false);
+            if (!loggedIn.currentUser.equals("")){
+                register.setVisible(false);
             loggedIn.mainMenuPanel.setVisible(true);
             updateMenu();
 
             loggedIn.getCoupons();
+        }
+        else{
+                System.out.println("incorrect username/password combination");
+            }
         });
 
         loggedIn.logOutButton.addActionListener(e ->{
@@ -79,6 +89,10 @@ public class Register {
             loggedIn.mainMenuPanel.setVisible(false);
             usernameField.setText("");
             passwordField.setText("");
+            username.setText("");
+            password.setText("");
+            loggedIn.currentUser = "";
+
         });
 
 
@@ -163,11 +177,11 @@ public class Register {
     void getUser(){
 
         try{
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "MagicalDay9296");
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "oddschool0");
 
             Statement statement = connection.createStatement();
 
-            ResultSet resultSet = statement.executeQuery("SELECT customer_id FROM piljetter.user_account WHERE email = '"+usernameInput+"'");
+            ResultSet resultSet = statement.executeQuery("SELECT customer_id FROM piljetter.user_accounts WHERE (email = '"+usernameInput+"') and (password = '"+pasInput+"') ");
 
             while(resultSet.next()){
                 loggedIn.currentUser = resultSet.getInt("customer_id");
@@ -260,7 +274,7 @@ public class Register {
     private void registerNewUser() {
         try{
 
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "MagicalDay9296");
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "oddschool0");
 
             Statement statement = connection.createStatement();
 

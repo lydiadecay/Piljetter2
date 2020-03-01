@@ -25,8 +25,7 @@ public class LoggedIn {
     JLabel pesetas, coupons;
     JButton buyPesetasButton, logOutButton, allConcertsButton, confirmButton, backButton, backButton2, backButton3, allTicketsButton, allCouponsButton;
     TextField buyPesetasField;
-    int currentUser = 1;
-
+    String currentUser = "";
 
 
     void menu(){
